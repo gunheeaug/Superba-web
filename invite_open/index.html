@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join me on Superba!</title>
+  <meta name="description" content="Your friend invited you to run together on Superba">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 400px;
+      width: 100%;
+      padding: 40px 32px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+    .logo {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, #b0f600 0%, #8bc500 100%);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: bold;
+      color: #000;
+      box-shadow: 0 8px 32px rgba(176, 246, 0, 0.3);
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .tagline {
+      color: #a0a0a0;
+      font-size: 16px;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 17px;
+      margin-bottom: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .primary {
+      background: linear-gradient(135deg, #b0f600 0%, #8bc500 100%);
+      color: #000;
+      box-shadow: 0 4px 16px rgba(176, 246, 0, 0.3);
+    }
+    .ghost {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      background: transparent;
+    }
+    .loading {
+      color: #666;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">S</div>
+    <h1>Join me on Superba!</h1>
+    <p class="tagline">Your friend invited you to run together. Tap below to open the app.</p>
+    <a class="btn primary" id="openApp" href="#">Open Superba</a>
+    <a class="btn ghost" href="https://apps.apple.com/us/app/superba-run-with-friends/id6755465823">Get it on App Store</a>
+    <p class="loading" id="status"></p>
+  </div>
+
+  <script>
+    // Get invite code from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get('code');
+    
+    // Also check path for /invite_open/{code} format
+    if (!code) {
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      if (pathParts.length >= 2 && pathParts[0] === 'invite_open') {
+        code = pathParts[1];
+      }
+    }
+    
+    const deepLink = code ? `superba://invite?code=${encodeURIComponent(code)}` : 'superba://';
+    const appStoreUrl = 'https://apps.apple.com/us/app/superba-run-with-friends/id6755465823';
+    
+    // Update the Open button href
+    document.getElementById('openApp').href = deepLink;
+    
+    // Update meta tag for Smart App Banner
+    if (code) {
+      const meta = document.createElement('meta');
+      meta.name = 'apple-itunes-app';
+      meta.content = `app-id=6755465823, app-argument=${deepLink}`;
+      document.head.appendChild(meta);
+    }
+    
+    // Try to open app automatically
+    function tryOpenApp() {
+      document.getElementById('status').textContent = 'Opening app...';
+      
+      // Create hidden iframe to try opening the app
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = deepLink;
+      document.body.appendChild(iframe);
+      
+      // Also try direct navigation
+      setTimeout(function() {
+        window.location.href = deepLink;
+      }, 100);
+      
+      // If still here after 2 seconds, app probably not installed
+      setTimeout(function() {
+        document.getElementById('status').textContent = "App not opening? Tap 'Get it on App Store' below.";
+      }, 2000);
+    }
+    
+    // Auto-open after short delay
+    setTimeout(tryOpenApp, 500);
+  </script>
+</body>
+</html>
+
