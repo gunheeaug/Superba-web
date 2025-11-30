@@ -167,16 +167,15 @@
     
     // Try to open app automatically
     function tryOpenApp() {
-      document.getElementById('status').textContent = 'Opening app...';
-      
-      // For Android, just redirect to waitlist
+      // For Android, just redirect to waitlist immediately
       if (isAndroid) {
         redirectToStore();
         return;
       }
       
-      // For iOS, try to open the app
+      // For iOS, use a smarter approach that doesn't trigger error dialogs
       let appOpened = false;
+      const startTime = Date.now();
       
       // Track if user leaves the page (app opened successfully)
       const handleVisibilityChange = function() {
@@ -192,22 +191,30 @@
       };
       window.addEventListener('blur', handleBlur);
       
-      // Try to open via location change
-      window.location.href = deepLink;
+      // Use an anchor click instead of location.href to avoid error dialog
+      const link = document.createElement('a');
+      link.href = deepLink;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       
-      // If still here after 1.5 seconds, app is not installed - redirect to App Store
+      // If still here after 800ms, app is not installed - redirect to store
+      // Using shorter timeout to redirect before browser shows error
       setTimeout(function() {
         document.removeEventListener('visibilitychange', handleVisibilityChange);
         window.removeEventListener('blur', handleBlur);
         
+        // Only redirect if app didn't open and page is still visible
         if (!appOpened && !document.hidden) {
-          redirectToStore();
+          // Replace current history entry so user can't go back to this page
+          window.location.replace(isAndroid ? androidWaitlistUrl : appStoreUrl);
         }
-      }, 1500);
+      }, 800);
     }
     
-    // Auto-open after short delay
-    setTimeout(tryOpenApp, 300);
+    // Auto-open immediately
+    tryOpenApp();
   </script>
 </body>
 </html>
