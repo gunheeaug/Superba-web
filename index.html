@@ -73,33 +73,34 @@
       display: block;
       width: 100%;
       padding: 18px;
-      border-radius: 14px;
+      border-radius: 22px;
       text-decoration: none;
       font-weight: 600;
       font-size: 17px;
       margin-bottom: 12px;
       transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
     }
     .btn:active {
       transform: scale(0.98);
     }
     .primary {
-      background: linear-gradient(135deg, #b0f600 0%, #8bc500 100%);
-      color: #000;
-      box-shadow: 0 4px 16px rgba(176, 246, 0, 0.3);
+      background: #000;
+      color: #b0f600;
+      box-shadow: 0 0 20px rgba(176, 246, 0, 0.4), 0 0 40px rgba(176, 246, 0, 0.2);
+      text-shadow: 0 0 10px rgba(176, 246, 0, 0.6);
     }
     .primary:hover {
-      box-shadow: 0 6px 24px rgba(176, 246, 0, 0.4);
+      box-shadow: 0 0 30px rgba(176, 246, 0, 0.5), 0 0 60px rgba(176, 246, 0, 0.3);
     }
     .ghost {
-      border: 1px solid rgba(255, 255, 255, 0.3);
       color: #fff;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
     .ghost:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.2);
     }
   </style>
 </head>
