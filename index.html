@@ -28,7 +28,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.4);
       z-index: -1;
     }
     
@@ -41,15 +41,9 @@
       justify-content: center;
       padding: 24px;
     }
-    .card {
+    .content {
       max-width: 400px;
       width: 100%;
-      padding: 40px 32px;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
       text-align: center;
     }
     .logo {
@@ -60,12 +54,14 @@
     h1 {
       font-size: 32px;
       margin-bottom: 8px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     }
     .tagline {
-      color: #a0a0a0;
+      color: rgba(255, 255, 255, 0.8);
       font-size: 18px;
       margin-bottom: 32px;
       line-height: 1.5;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     }
     .btn {
       display: block;
@@ -90,12 +86,14 @@
       box-shadow: 0 6px 24px rgba(176, 246, 0, 0.4);
     }
     .ghost {
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       color: #fff;
-      background: transparent;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .ghost:hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.15);
     }
   </style>
 </head>
@@ -103,14 +101,13 @@
   <!-- Background Video -->
   <video class="video-bg" autoplay muted loop playsinline>
     <source src="/background.mp4" type="video/mp4">
-    <!-- Fallback for .mov (Safari might support it) -->
     <source src="/background.mov" type="video/quicktime">
   </video>
   
   <!-- Dark overlay -->
   <div class="video-overlay"></div>
   
-  <div class="card">
+  <div class="content">
     <img src="/superba-logo.png" alt="Superba" class="logo">
     <h1>Superba</h1>
     <p class="tagline">Run together</p>
