@@ -137,6 +137,12 @@
     
     const deepLink = code ? `superba://invite?code=${encodeURIComponent(code)}` : 'superba://';
     const appStoreUrl = 'https://apps.apple.com/us/app/superba-run-with-friends/id6755465823';
+    const androidWaitlistUrl = 'https://pbdteam.notion.site/2bb1607e212c80439268fbccd4d1ef92';
+    
+    // Detect platform
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const isAndroid = /android/i.test(userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
     
     // Update the Open button href
     document.getElementById('openApp').href = deepLink;
@@ -149,29 +155,59 @@
       document.head.appendChild(meta);
     }
     
+    // Redirect to appropriate store
+    function redirectToStore() {
+      if (isAndroid) {
+        window.location.href = androidWaitlistUrl;
+      } else {
+        // iOS or unknown - go to App Store
+        window.location.href = appStoreUrl;
+      }
+    }
+    
     // Try to open app automatically
     function tryOpenApp() {
       document.getElementById('status').textContent = 'Opening app...';
       
-      // Create hidden iframe to try opening the app
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = deepLink;
-      document.body.appendChild(iframe);
+      // For Android, just redirect to waitlist
+      if (isAndroid) {
+        redirectToStore();
+        return;
+      }
       
-      // Also try direct navigation
-      setTimeout(function() {
-        window.location.href = deepLink;
-      }, 100);
+      // For iOS, try to open the app
+      let appOpened = false;
       
-      // If still here after 2 seconds, app probably not installed
+      // Track if user leaves the page (app opened successfully)
+      const handleVisibilityChange = function() {
+        if (document.hidden) {
+          appOpened = true;
+        }
+      };
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      
+      // Also track blur (older method)
+      const handleBlur = function() {
+        appOpened = true;
+      };
+      window.addEventListener('blur', handleBlur);
+      
+      // Try to open via location change
+      window.location.href = deepLink;
+      
+      // If still here after 1.5 seconds, app is not installed - redirect to App Store
       setTimeout(function() {
-        document.getElementById('status').textContent = "App not opening? Tap 'Download on App Store' below.";
-      }, 2000);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.removeEventListener('blur', handleBlur);
+        
+        if (!appOpened && !document.hidden) {
+          redirectToStore();
+        }
+      }, 1500);
     }
     
     // Auto-open after short delay
-    setTimeout(tryOpenApp, 500);
+    setTimeout(tryOpenApp, 300);
   </script>
 </body>
 </html>
