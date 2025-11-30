@@ -8,9 +8,31 @@
   <link rel="icon" type="image/png" href="/superba-logo.png">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* Video background */
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+    
+    /* Dark overlay on video */
+    .video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: #fff;
       min-height: 100vh;
       display: flex;
@@ -18,42 +40,44 @@
       justify-content: center;
       padding: 24px;
     }
-    .card {
+    .content {
       max-width: 400px;
       width: 100%;
-      padding: 40px 32px;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
       text-align: center;
     }
     .logo {
-      width: 120px;
+      width: 56px;
       height: auto;
-      margin: 0 auto 24px;
+      margin: 0 auto 20px;
+      filter: drop-shadow(0 0 12px rgba(176, 246, 0, 0.8)) drop-shadow(0 0 24px rgba(176, 246, 0, 0.5));
     }
     h1 {
-      font-size: 28px;
+      font-size: 36px;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: -1px;
       margin-bottom: 8px;
+      color: #fff;
     }
     .tagline {
-      color: #a0a0a0;
       font-size: 16px;
-      margin-bottom: 32px;
+      font-weight: 400;
+      color: #fff;
+      margin-bottom: 80px;
       line-height: 1.5;
     }
     .btn {
       display: block;
       width: 100%;
       padding: 18px;
-      border-radius: 14px;
+      border-radius: 22px;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 400;
       font-size: 17px;
       margin-bottom: 12px;
       transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
     }
     .btn:active {
       transform: scale(0.98);
@@ -61,27 +85,40 @@
     .primary {
       background: linear-gradient(135deg, #b0f600 0%, #8bc500 100%);
       color: #000;
-      box-shadow: 0 4px 16px rgba(176, 246, 0, 0.3);
     }
-    .ghost {
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    .primary:hover {
+      opacity: 0.9;
+    }
+    .secondary {
+      background: #000;
       color: #fff;
-      background: transparent;
+    }
+    .secondary:hover {
+      opacity: 0.9;
     }
     .loading {
-      color: #666;
+      color: rgba(255, 255, 255, 0.6);
       font-size: 14px;
       margin-top: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="card">
+  <!-- Background Video -->
+  <video class="video-bg" autoplay muted loop playsinline>
+    <source src="/background.mp4" type="video/mp4">
+    <source src="/background.mov" type="video/quicktime">
+  </video>
+  
+  <!-- Dark overlay -->
+  <div class="video-overlay"></div>
+  
+  <div class="content">
     <img src="/superba-logo.png" alt="Superba" class="logo">
-    <h1>Join me on Superba!</h1>
-    <p class="tagline">Your friend invited you to run together. Tap below to open the app.</p>
-    <a class="btn primary" id="openApp" href="#">Open Superba</a>
-    <a class="btn ghost" href="https://apps.apple.com/us/app/superba-run-with-friends/id6755465823">Get it on App Store</a>
+    <h1>SUPERBA</h1>
+    <p class="tagline">Your friend invited you to run together.</p>
+    <a class="btn primary" id="openApp" href="#">Open <span style="font-weight:600">Superba</span></a>
+    <a class="btn secondary" href="https://apps.apple.com/us/app/superba-run-with-friends/id6755465823">Download on <span style="font-weight:600">App Store</span></a>
     <p class="loading" id="status"></p>
   </div>
 
@@ -129,7 +166,7 @@
       
       // If still here after 2 seconds, app probably not installed
       setTimeout(function() {
-        document.getElementById('status').textContent = "App not opening? Tap 'Get it on App Store' below.";
+        document.getElementById('status').textContent = "App not opening? Tap 'Download on App Store' below.";
       }, 2000);
     }
     
