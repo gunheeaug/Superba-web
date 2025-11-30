@@ -8,6 +8,13 @@
   <meta name="apple-itunes-app" content="app-id=6755465823">
   <link rel="icon" type="image/png" href="/superba-logo.png">
   <style>
+    @font-face {
+      font-family: 'Knewave';
+      src: url('/Knewave-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     /* Video background */
@@ -33,7 +40,7 @@
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Knewave', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: #fff;
       min-height: 100vh;
       display: flex;
@@ -47,21 +54,25 @@
       text-align: center;
     }
     .logo {
-      width: 120px;
+      width: 80px;
       height: auto;
-      margin: 0 auto 24px;
+      margin: 0 auto 20px;
     }
     h1 {
-      font-size: 32px;
+      font-family: 'Knewave', sans-serif;
+      font-size: 36px;
       margin-bottom: 8px;
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      font-weight: normal;
     }
     .tagline {
+      font-family: 'Knewave', sans-serif;
       color: rgba(255, 255, 255, 0.8);
-      font-size: 18px;
+      font-size: 20px;
       margin-bottom: 32px;
       line-height: 1.5;
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      font-weight: normal;
     }
     .btn {
       display: block;
@@ -69,7 +80,8 @@
       padding: 18px;
       border-radius: 14px;
       text-decoration: none;
-      font-weight: 600;
+      font-family: 'Knewave', sans-serif;
+      font-weight: normal;
       font-size: 17px;
       margin-bottom: 12px;
       transition: transform 0.2s, box-shadow 0.2s;
