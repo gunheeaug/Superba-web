@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join me on Superba</title>
     
-    <!-- Open Graph / Link Preview -->
+    <!-- Open Graph / Link Preview - Dynamic name will be shown on page, but static for crawlers -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://share.superba.me/invite_open">
     <meta property="og:title" content="Join me on Superba! 🏃‍♂️">
-    <meta property="og:description" content="Your friend invited you to run together.">
+    <meta property="og:description" content="You're invited to run together on Superba.">
     <meta property="og:image" content="https://share.superba.me/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -17,7 +17,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Join me on Superba! 🏃‍♂️">
-    <meta name="twitter:description" content="Your friend invited you to run together.">
+    <meta name="twitter:description" content="You're invited to run together on Superba.">
     <meta name="twitter:image" content="https://share.superba.me/og-image.png">
     
     <!-- iOS Smart App Banner -->
@@ -123,7 +123,7 @@
     <div class="container">
         <img src="../superba-logo.png" alt="Superba" class="logo">
         <h1 class="title">SUPERBA</h1>
-        <p class="tagline">Your friend invited you to run together.</p>
+        <p class="tagline" id="tagline">Your friend invited you to run together.</p>
         
         <div class="buttons">
             <a href="https://pbdteam.notion.site/2bb1607e212c80439268fbccd4d1ef92" class="btn btn-android" id="androidBtn">
@@ -136,9 +136,16 @@
     </div>
     
     <script>
-        // Get invite code from URL
+        // Get invite code and name from URL
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code') || '';
+        const name = urlParams.get('name') || '';
+        
+        // Update tagline with inviter's name if available
+        if (name) {
+            const tagline = document.getElementById('tagline');
+            tagline.textContent = name + ' invites you to run together.';
+        }
         
         // Detect platform
         const isAndroid = /android/i.test(navigator.userAgent);
