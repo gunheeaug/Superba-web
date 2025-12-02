@@ -1,220 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Join me on Superba!</title>
-  <meta name="description" content="Your friend invited you to run together on Superba">
-  <link rel="icon" type="image/png" href="/superba-logo.png">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join me on Superba</title>
     
-    /* Video background */
-    .video-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
-    }
+    <!-- Open Graph / Link Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://share.superba.me/invite_open">
+    <meta property="og:title" content="Join me on Superba! 🏃‍♂️">
+    <meta property="og:description" content="Your friend invited you to run together.">
+    <meta property="og:image" content="https://share.superba.me/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     
-    /* Dark overlay on video */
-    .video-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: -1;
-    }
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Join me on Superba! 🏃‍♂️">
+    <meta name="twitter:description" content="Your friend invited you to run together.">
+    <meta name="twitter:image" content="https://share.superba.me/og-image.png">
     
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .content {
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-    .logo {
-      width: 56px;
-      height: auto;
-      margin: 0 auto 20px;
-      filter: drop-shadow(0 0 8px rgba(176, 246, 0, 0.5)) drop-shadow(0 0 16px rgba(176, 246, 0, 0.3));
-    }
-    h1 {
-      font-size: 36px;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      letter-spacing: -1px;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-    .tagline {
-      font-size: 16px;
-      font-weight: 400;
-      color: #fff;
-      margin-bottom: 80px;
-      line-height: 1.5;
-    }
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 18px;
-      border-radius: 22px;
-      text-decoration: none;
-      font-weight: 400;
-      font-size: 17px;
-      margin-bottom: 12px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      border: none;
-    }
-    .btn:active {
-      transform: scale(0.98);
-    }
-    .primary {
-      background: linear-gradient(135deg, #b0f600 0%, #8bc500 100%);
-      color: #000;
-    }
-    .primary:hover {
-      opacity: 0.9;
-    }
-    .secondary {
-      background: #000;
-      color: #fff;
-    }
-    .secondary:hover {
-      opacity: 0.9;
-    }
-    .loading {
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 14px;
-      margin-top: 16px;
-    }
-  </style>
+    <!-- iOS Smart App Banner -->
+    <meta name="apple-itunes-app" content="app-id=6755465823">
+    
+    <style>
+        @font-face {
+            font-family: 'Knewave';
+            src: url('../Knewave-Regular.ttf') format('truetype');
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .video-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 24px;
+            max-width: 400px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px rgba(176, 246, 0, 0.4));
+        }
+        
+        .title {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+        
+        .tagline {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 60px;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .btn {
+            display: block;
+            padding: 16px 24px;
+            border-radius: 22px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 400;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover { transform: scale(1.02); }
+        
+        .btn-android {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+        }
+        
+        .btn-android strong { font-weight: 600; }
+        
+        .btn-appstore {
+            background: #000;
+            color: #fff;
+        }
+        
+        .btn-appstore strong { font-weight: 600; }
+    </style>
 </head>
 <body>
-  <!-- Background Video -->
-  <video class="video-bg" autoplay muted loop playsinline>
-    <source src="/background.mp4" type="video/mp4">
-    <source src="/background.mov" type="video/quicktime">
-  </video>
-  
-  <!-- Dark overlay -->
-  <div class="video-overlay"></div>
-  
-  <div class="content">
-    <img src="/superba-logo.png" alt="Superba" class="logo">
-    <h1>SUPERBA</h1>
-    <p class="tagline">Your friend invited you to run together.</p>
-    <a class="btn primary" id="openApp" href="#">Open <span style="font-weight:600">Superba</span></a>
-    <a class="btn secondary" href="https://apps.apple.com/us/app/superba-run-with-friends/id6755465823">Download on <span style="font-weight:600">App Store</span></a>
-    <p class="loading" id="status"></p>
-  </div>
-
-  <script>
-    // Get invite code from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    let code = urlParams.get('code');
+    <video class="video-bg" autoplay muted loop playsinline>
+        <source src="../background.mp4" type="video/mp4">
+    </video>
     
-    // Also check path for /invite_open/{code} format
-    if (!code) {
-      const pathParts = window.location.pathname.split('/').filter(Boolean);
-      if (pathParts.length >= 2 && pathParts[0] === 'invite_open') {
-        code = pathParts[1];
-      }
-    }
-    
-    const deepLink = code ? `superba://invite?code=${encodeURIComponent(code)}` : 'superba://';
-    const appStoreUrl = 'https://apps.apple.com/us/app/superba-run-with-friends/id6755465823';
-    const androidWaitlistUrl = 'https://pbdteam.notion.site/2bb1607e212c80439268fbccd4d1ef92';
-    
-    // Detect platform
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    const isAndroid = /android/i.test(userAgent);
-    const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
-    
-    // Update the Open button href
-    document.getElementById('openApp').href = deepLink;
-    
-    // Update meta tag for Smart App Banner
-    if (code) {
-      const meta = document.createElement('meta');
-      meta.name = 'apple-itunes-app';
-      meta.content = `app-id=6755465823, app-argument=${deepLink}`;
-      document.head.appendChild(meta);
-    }
-    
-    // Redirect to appropriate store
-    function redirectToStore() {
-      if (isAndroid) {
-        window.location.href = androidWaitlistUrl;
-      } else {
-        // iOS or unknown - go to App Store
-        window.location.href = appStoreUrl;
-      }
-    }
-    
-    // Try to open app automatically
-    function tryOpenApp() {
-      // For Android, just redirect to waitlist immediately
-      if (isAndroid) {
-        redirectToStore();
-        return;
-      }
-      
-      // For iOS, use a smarter approach that doesn't trigger error dialogs
-      let appOpened = false;
-      const startTime = Date.now();
-      
-      // Track if user leaves the page (app opened successfully)
-      const handleVisibilityChange = function() {
-        if (document.hidden) {
-          appOpened = true;
-        }
-      };
-      document.addEventListener('visibilitychange', handleVisibilityChange);
-      
-      // Also track blur (older method)
-      const handleBlur = function() {
-        appOpened = true;
-      };
-      window.addEventListener('blur', handleBlur);
-      
-      // Use an anchor click instead of location.href to avoid error dialog
-      const link = document.createElement('a');
-      link.href = deepLink;
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // If still here after 800ms, app is not installed - redirect to store
-      // Using shorter timeout to redirect before browser shows error
-      setTimeout(function() {
-        document.removeEventListener('visibilitychange', handleVisibilityChange);
-        window.removeEventListener('blur', handleBlur);
+    <div class="container">
+        <img src="../superba-logo.png" alt="Superba" class="logo">
+        <h1 class="title">SUPERBA</h1>
+        <p class="tagline">Your friend invited you to run together.</p>
         
-        // Only redirect if app didn't open and page is still visible
-        if (!appOpened && !document.hidden) {
-          // Replace current history entry so user can't go back to this page
-          window.location.replace(isAndroid ? androidWaitlistUrl : appStoreUrl);
-        }
-      }, 800);
-    }
+        <div class="buttons">
+            <a href="https://pbdteam.notion.site/2bb1607e212c80439268fbccd4d1ef92" class="btn btn-android" id="androidBtn">
+                Waitlist for <strong>Android</strong>
+            </a>
+            <a href="https://apps.apple.com/us/app/superba-run-with-friends/id6755465823" class="btn btn-appstore" id="appstoreBtn">
+                Download on <strong>App Store</strong>
+            </a>
+        </div>
+    </div>
     
-    // Auto-open immediately
-    tryOpenApp();
-  </script>
+    <script>
+        // Get invite code from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code') || '';
+        
+        // Detect platform
+        const isAndroid = /android/i.test(navigator.userAgent);
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        
+        if (isAndroid) {
+            // Android: redirect to waitlist
+            window.location.href = 'https://pbdteam.notion.site/2bb1607e212c80439268fbccd4d1ef92';
+        } else if (isIOS) {
+            // iOS: try to open app, fallback to App Store
+            const appUrl = 'superba://invite?code=' + code;
+            const appStoreUrl = 'https://apps.apple.com/us/app/superba-run-with-friends/id6755465823';
+            
+            // Try to open app
+            const start = Date.now();
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = appUrl;
+            document.body.appendChild(iframe);
+            
+            // If app doesn't open within 1.5s, go to App Store
+            setTimeout(function() {
+                if (Date.now() - start < 2000) {
+                    window.location.href = appStoreUrl;
+                }
+            }, 1500);
+        }
+    </script>
 </body>
 </html>
+

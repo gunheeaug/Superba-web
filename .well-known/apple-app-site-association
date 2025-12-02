@@ -4,10 +4,7 @@
     "details": [
       {
         "appID": "6PVR7QDSY5.team.pbd.superba",
-        "paths": [
-          "/invite_open/*",
-          "/invite_open"
-        ]
+        "paths": ["/invite_open", "/invite_open/*", "/invite_open?*"]
       }
     ]
   }

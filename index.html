@@ -1,122 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Superba - Run with Friends</title>
-  <meta name="description" content="Track your runs and compete with friends on Superba">
-  <meta name="apple-itunes-app" content="app-id=6755465823">
-  <link rel="icon" type="image/png" href="/superba-logo.png">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superba - Run with friends</title>
     
-    /* Video background */
-    .video-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
-    }
+    <!-- Open Graph / Link Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://share.superba.me/">
+    <meta property="og:title" content="Superba">
+    <meta property="og:description" content="Run with friends.">
+    <meta property="og:image" content="https://share.superba.me/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     
-    /* Dark overlay on video */
-    .video-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: -1;
-    }
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Superba">
+    <meta name="twitter:description" content="Run with friends.">
+    <meta name="twitter:image" content="https://share.superba.me/og-image.png">
     
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .content {
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-    .logo {
-      width: 56px;
-      height: auto;
-      margin: 0 auto 20px;
-      filter: drop-shadow(0 0 8px rgba(176, 246, 0, 0.5)) drop-shadow(0 0 16px rgba(176, 246, 0, 0.3));
-    }
-    h1 {
-      font-size: 36px;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      letter-spacing: -1px;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-    .tagline {
-      font-size: 16px;
-      font-weight: 400;
-      color: #fff;
-      margin-bottom: 80px;
-      line-height: 1.5;
-    }
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 18px;
-      border-radius: 22px;
-      text-decoration: none;
-      font-weight: 400;
-      font-size: 17px;
-      margin-bottom: 12px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      border: none;
-    }
-    .btn:active {
-      transform: scale(0.98);
-    }
-    .primary {
-      background: #000;
-      color: #fff;
-    }
-    .primary:hover {
-      opacity: 0.9;
-    }
-    .ghost {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    .ghost:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-  </style>
+    <!-- iOS Smart App Banner -->
+    <meta name="apple-itunes-app" content="app-id=6755465823">
+    
+    <style>
+        @font-face {
+            font-family: 'Knewave';
+            src: url('Knewave-Regular.ttf') format('truetype');
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .video-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 24px;
+            max-width: 400px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px rgba(176, 246, 0, 0.4));
+        }
+        
+        .title {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+        
+        .tagline {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 60px;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .btn {
+            display: block;
+            padding: 16px 24px;
+            border-radius: 22px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 400;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover { transform: scale(1.02); }
+        
+        .btn-android {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+        }
+        
+        .btn-android strong { font-weight: 600; }
+        
+        .btn-appstore {
+            background: #000;
+            color: #fff;
+        }
+        
+        .btn-appstore strong { font-weight: 600; }
+    </style>
 </head>
 <body>
-  <!-- Background Video -->
-  <video class="video-bg" autoplay muted loop playsinline>
-    <source src="/background.mp4" type="video/mp4">
-    <source src="/background.mov" type="video/quicktime">
-  </video>
-  
-  <!-- Dark overlay -->
-  <div class="video-overlay"></div>
-  
-  <div class="content">
-    <img src="/superba-logo.png" alt="Superba" class="logo">
-    <h1>SUPERBA</h1>
-    <p class="tagline">Run with friends.</p>
-    <a class="btn ghost" href="https://pbdteam.notion.site/2bb1607e212c80439268fbccd4d1ef92">Waitlist for <span style="font-weight:600">Android</span></a>
-    <a class="btn primary" href="https://apps.apple.com/us/app/superba-run-with-friends/id6755465823">Download on <span style="font-weight:600">App Store</span></a>
-  </div>
+    <video class="video-bg" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    
+    <div class="container">
+        <img src="superba-logo.png" alt="Superba" class="logo">
+        <h1 class="title">SUPERBA</h1>
+        <p class="tagline">Run with friends.</p>
+        
+        <div class="buttons">
+            <a href="https://pbdteam.notion.site/2bb1607e212c80439268fbccd4d1ef92" class="btn btn-android">
+                Waitlist for <strong>Android</strong>
+            </a>
+            <a href="https://apps.apple.com/us/app/superba-run-with-friends/id6755465823" class="btn btn-appstore">
+                Download on <strong>App Store</strong>
+            </a>
+        </div>
+    </div>
 </body>
 </html>
+
