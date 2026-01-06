@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Superba - Run with friends</title>
+    <title>Superba - Run IRL with Friends</title>
     
     <!-- Open Graph / Link Preview -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://share.superba.me/">
-    <meta property="og:title" content="Superba">
-    <meta property="og:description" content="Run with friends.">
+    <meta property="og:title" content="Superba - Run IRL with Friends">
+    <meta property="og:description" content="Run, track, share, repeat ⚡">
     <meta property="og:image" content="https://share.superba.me/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Superba">
-    <meta name="twitter:description" content="Run with friends.">
+    <meta name="twitter:title" content="Superba - Run IRL with Friends">
+    <meta name="twitter:description" content="Run, track, share, repeat ⚡">
     <meta name="twitter:image" content="https://share.superba.me/og-image.png">
     
     <!-- iOS Smart App Banner -->
@@ -27,6 +27,26 @@
         @font-face {
             font-family: 'Knewave';
             src: url('Knewave-Regular.ttf') format('truetype');
+        }
+        
+        @font-face {
+            font-family: 'Lacquer';
+            src: url('Lacquer-Regular.ttf') format('truetype');
+        }
+        
+        @font-face {
+            font-family: 'Network';
+            src: url('NetworkFreeVersion.ttf') format('truetype');
+        }
+        
+        @font-face {
+            font-family: 'CalSans';
+            src: url('CalSans-Regular.ttf') format('truetype');
+        }
+        
+        @font-face {
+            font-family: 'Exqt';
+            src: url('exqt.ttf') format('truetype');
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -57,21 +77,77 @@
             max-width: 400px;
         }
         
+        .logo-wrapper {
+            display: inline-block;
+            padding: 24px;
+            margin-bottom: -4px;
+        }
+        
         .logo {
             width: 80px;
             height: 80px;
-            margin-bottom: 20px;
+            display: block;
             filter: drop-shadow(0 0 20px rgba(176, 246, 0, 0.4));
         }
         
         .title {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            font-family: 'Lacquer', cursive;
             font-size: 32px;
-            font-weight: 900;
-            font-style: italic;
+            font-weight: 400;
+            font-style: normal;
             color: #fff;
-            letter-spacing: -1px;
+            letter-spacing: 0px;
             margin-bottom: 8px;
+            height: 44px;
+            line-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .title.font-lacquer {
+            font-family: 'Lacquer', cursive;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 0px;
+        }
+        
+        .title.font-network {
+            font-family: 'Network', cursive;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 1px;
+        }
+        
+        .title.font-knewave {
+            font-family: 'Knewave', cursive;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 0px;
+        }
+        
+        .title.font-calsans {
+            font-family: 'CalSans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: -1px;
+        }
+        
+        .title.font-exqt {
+            font-family: 'Exqt', cursive;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 0px;
+        }
+        
+        .title.font-friends {
+            font-size: 0; /* Hide any text */
+        }
+        
+        .title .friends-img {
+            height: 36px;
+            width: auto;
+            vertical-align: middle;
         }
         
         .tagline {
@@ -121,8 +197,10 @@
     </video>
     
     <div class="container">
-        <img src="superba-logo.png" alt="Superba" class="logo">
-        <h1 class="title">SUPERBA</h1>
+        <div class="logo-wrapper">
+            <img src="superba-logo.png" alt="Superba" class="logo">
+        </div>
+        <h1 class="title">Superba</h1>
         <p class="tagline">Run with friends.</p>
         
         <div class="buttons">
@@ -130,10 +208,53 @@
                 Waitlist for <strong>Android</strong>
             </a>
             <a href="https://apps.apple.com/us/app/superba-run-with-friends/id6755465823" class="btn btn-appstore">
-                Download on <strong>App Store</strong>
+                 Download on <strong>App Store</strong>
             </a>
         </div>
     </div>
+    
+    <script>
+        // Font rotation animation - continuous loop, slow
+        document.addEventListener('DOMContentLoaded', function() {
+            const title = document.querySelector('.title');
+            const fonts = ['font-lacquer', 'font-network', 'font-knewave', 'font-calsans', 'font-exqt', 'font-friends'];
+            let currentIndex = 0;
+            const speed = 500; // ms between font changes
+            
+            // Start with first font
+            title.classList.add(fonts[0]);
+            
+            function cycleFont() {
+                // Remove current font class
+                title.classList.remove(fonts[currentIndex]);
+                
+                // Move to next font (loop back to start)
+                currentIndex = (currentIndex + 1) % fonts.length;
+                
+                // Add next font class
+                title.classList.add(fonts[currentIndex]);
+                
+                // Change content based on font
+                if (fonts[currentIndex] === 'font-friends') {
+                    title.innerHTML = '<img src="Friends.png" class="friends-img" alt="Friends">';
+                } else if (fonts[currentIndex] === 'font-exqt') {
+                    title.textContent = "08'15\"";
+                } else if (fonts[currentIndex] === 'font-knewave') {
+                    title.textContent = '365 cal';
+                } else if (fonts[currentIndex] === 'font-network') {
+                    title.textContent = '11.05mi';
+                } else {
+                    title.textContent = 'Superba';
+                }
+                
+                // Schedule next cycle (continuous loop)
+                setTimeout(cycleFont, speed);
+            }
+            
+            // Start cycling after initial display
+            setTimeout(cycleFont, speed);
+        });
+    </script>
 </body>
 </html>
 
