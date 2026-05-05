@@ -150,6 +150,11 @@
             vertical-align: middle;
         }
         
+        .title .unit {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+        
         .tagline {
             font-size: 18px;
             color: #fff;
@@ -265,7 +270,7 @@
                 } else if (fonts[currentIndex] === 'font-exqt') {
                     title.textContent = "08'15\"";
                 } else if (fonts[currentIndex] === 'font-knewave') {
-                    title.textContent = '365 cal';
+                    title.innerHTML = '365 <span class="unit">cal</span>';
                 } else if (fonts[currentIndex] === 'font-network') {
                     title.textContent = '11.05mi';
                 } else {
