@@ -126,10 +126,10 @@
         <!-- Login view -->
         <div id="login-view" class="login" hidden>
             <h2>Superba Admin</h2>
-            <p>Sign in with your admin email. A one-time login link will be sent.</p>
+            <p>Enter the admin password.</p>
             <form id="login-form">
-                <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
-                <button id="login-btn" type="submit">Send login link</button>
+                <input id="password" type="password" placeholder="Password" autocomplete="current-password" required>
+                <button id="login-btn" type="submit">Sign in</button>
             </form>
             <div id="login-msg" class="msg"></div>
         </div>
@@ -139,7 +139,6 @@
             <header class="top">
                 <h1>Superba Admin</h1>
                 <div class="who">
-                    <span id="who-email"></span>
                     <button id="signout-btn">Sign out</button>
                 </div>
             </header>
@@ -213,87 +212,87 @@
     </div>
 
     <script type="module">
-        import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
-
         const SUPABASE_URL = "https://tqugnlmtkvmdzwqskgva.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxdWdubG10a3ZtZHp3cXNrZ3ZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxNDYwNzgsImV4cCI6MjA3NzcyMjA3OH0.ObAL7EHHu36vbsjmTV7UexwzuIor6DsQdaRRFNc-EbM";
         const FN_URL = `${SUPABASE_URL}/functions/v1/admin_metrics`;
-        const REDIRECT_TO = `${window.location.origin}/admin/`;
-
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-        });
+        const PW_KEY = "superba_admin_pw";
 
         const $ = (id) => document.getElementById(id);
 
         // ---------- View switching ----------
-        function showLogin()  { $("login-view").hidden = false; $("dash-view").hidden = true; }
-        function showDash()   { $("login-view").hidden = true;  $("dash-view").hidden = false; }
+        function showLogin(message) {
+            $("login-view").hidden = false;
+            $("dash-view").hidden = true;
+            if (message) {
+                const msg = $("login-msg");
+                msg.className = "msg err";
+                msg.textContent = message;
+            }
+        }
+        function showDash() { $("login-view").hidden = true; $("dash-view").hidden = false; }
 
         // ---------- Login flow ----------
+        // The password is never embedded in this page: it is sent to the
+        // admin_metrics Edge Function, which checks it server-side.
         $("login-form").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const email = $("email").value.trim();
-            const btn   = $("login-btn");
-            const msg   = $("login-msg");
-            msg.className = "msg";
-            msg.textContent = "";
+            const btn = $("login-btn");
             btn.disabled = true;
-            btn.textContent = "Sending…";
-            try {
-                const { error } = await supabase.auth.signInWithOtp({
-                    email,
-                    options: { emailRedirectTo: REDIRECT_TO },
-                });
-                if (error) throw error;
-                msg.className = "msg ok";
-                msg.textContent = "Check your email — click the link to sign in.";
-            } catch (err) {
-                msg.className = "msg err";
-                msg.textContent = err.message || "Failed to send link.";
-            } finally {
-                btn.disabled = false;
-                btn.textContent = "Send login link";
+            btn.textContent = "Checking…";
+            sessionStorage.setItem(PW_KEY, $("password").value);
+            const ok = await loadMetrics();
+            btn.disabled = false;
+            btn.textContent = "Sign in";
+            if (ok) {
+                showDash();
+                $("password").value = "";
+                $("login-msg").className = "msg";
+                $("login-msg").textContent = "";
             }
         });
 
-        $("signout-btn").addEventListener("click", async () => {
-            await supabase.auth.signOut();
+        $("signout-btn").addEventListener("click", () => {
+            sessionStorage.removeItem(PW_KEY);
             window.location.reload();
         });
 
         // ---------- Data load + render ----------
+        // Returns true if the payload was rendered, false on auth failure.
         async function loadMetrics() {
             const tbody = $("runs-tbody");
             tbody.innerHTML = `<tr><td colspan="4" class="empty">Loading…</td></tr>`;
 
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) { showLogin(); return; }
+            const pw = sessionStorage.getItem(PW_KEY);
+            if (!pw) { showLogin(); return false; }
 
             const limit = $("limit").value;
             let res;
             try {
                 res = await fetch(`${FN_URL}?limit=${encodeURIComponent(limit)}`, {
-                    headers: { Authorization: `Bearer ${session.access_token}` },
+                    headers: {
+                        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                        "x-admin-password": pw,
+                    },
                 });
             } catch (err) {
                 tbody.innerHTML = `<tr><td colspan="4" class="err">Network error: ${err.message}</td></tr>`;
-                return;
+                return false;
             }
 
-            if (res.status === 401) { showLogin(); return; }
-            if (res.status === 403) {
-                tbody.innerHTML = `<tr><td colspan="4" class="err">This account is not in the admin allowlist.</td></tr>`;
-                return;
+            if (res.status === 401 || res.status === 403) {
+                sessionStorage.removeItem(PW_KEY);
+                showLogin("Wrong password.");
+                return false;
             }
             if (!res.ok) {
                 const txt = await res.text().catch(() => "");
                 tbody.innerHTML = `<tr><td colspan="4" class="err">HTTP ${res.status} — ${txt}</td></tr>`;
-                return;
+                return true;
             }
 
             const payload = await res.json();
             render(payload);
+            return true;
         }
 
         function render(p) {
@@ -396,25 +395,12 @@
 
         // ---------- Boot ----------
         (async () => {
-            // detectSessionInUrl handles the magic-link redirect automatically.
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
+            if (sessionStorage.getItem(PW_KEY)) {
                 showDash();
-                $("who-email").textContent = session.user.email || "";
-                loadMetrics();
+                if (!(await loadMetrics())) showLogin();
             } else {
                 showLogin();
             }
-
-            supabase.auth.onAuthStateChange((event, sess) => {
-                if (event === "SIGNED_IN" && sess) {
-                    showDash();
-                    $("who-email").textContent = sess.user.email || "";
-                    loadMetrics();
-                } else if (event === "SIGNED_OUT") {
-                    showLogin();
-                }
-            });
         })();
     </script>
 </body>
