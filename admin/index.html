@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superba Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="/superba-logo.png">
+    <style>
+        :root {
+            --bg: #0b0b0f;
+            --panel: #15161c;
+            --panel-2: #1d1f28;
+            --border: #2a2d39;
+            --text: #ececf1;
+            --muted: #8a8fa3;
+            --accent: #6ee7ff;
+            --accent-soft: rgba(110, 231, 255, 0.12);
+            --danger: #ff6b6b;
+            --ok: #6ee7b7;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+            min-height: 100vh;
+            line-height: 1.4;
+        }
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+
+        header.top {
+            display: flex; align-items: baseline; justify-content: space-between;
+            margin-bottom: 28px;
+        }
+        header.top h1 { font-size: 20px; font-weight: 600; letter-spacing: 0.2px; margin: 0; }
+        header.top .who { font-size: 13px; color: var(--muted); }
+        header.top .who button {
+            background: none; border: 1px solid var(--border); color: var(--muted);
+            padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;
+            margin-left: 10px;
+        }
+        header.top .who button:hover { color: var(--text); border-color: var(--text); }
+
+        /* login card */
+        .login {
+            max-width: 380px; margin: 12vh auto 0; padding: 28px;
+            background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+        }
+        .login h2 { margin: 0 0 6px; font-size: 18px; font-weight: 600; }
+        .login p  { margin: 0 0 18px; font-size: 13px; color: var(--muted); }
+        .login form { display: flex; flex-direction: column; gap: 10px; }
+        .login input {
+            background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
+            padding: 12px 14px; border-radius: 8px; font-size: 14px; font-family: inherit;
+            outline: none;
+        }
+        .login input:focus { border-color: var(--accent); }
+        .login button {
+            background: var(--accent); color: #0b0b0f; border: none;
+            padding: 12px 14px; border-radius: 8px; font-size: 14px; font-weight: 600;
+            cursor: pointer;
+        }
+        .login button:disabled { opacity: 0.5; cursor: progress; }
+        .login .msg { margin-top: 10px; font-size: 13px; min-height: 1.2em; }
+        .login .msg.ok { color: var(--ok); }
+        .login .msg.err { color: var(--danger); }
+
+        /* dashboard */
+        section { margin-bottom: 28px; }
+        section h2 {
+            font-size: 13px; font-weight: 600; color: var(--muted);
+            text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px;
+        }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+        .card {
+            background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+            padding: 16px 18px;
+        }
+        .card .label { font-size: 12px; color: var(--muted); }
+        .card .value { font-size: 28px; font-weight: 700; margin-top: 4px; letter-spacing: -0.4px; }
+        .card .sub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+        /* runs table */
+        .table-wrap {
+            background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+            overflow: hidden;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        thead th {
+            text-align: left; padding: 10px 14px; font-weight: 600; font-size: 11px;
+            text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted);
+            background: var(--panel-2); border-bottom: 1px solid var(--border);
+        }
+        tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: rgba(255,255,255,0.02); }
+        td.user .name { color: var(--text); }
+        td.user .email { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+        td.num { font-variant-numeric: tabular-nums; }
+        .empty, .err {
+            padding: 24px; text-align: center; color: var(--muted); font-size: 14px;
+        }
+        .err { color: var(--danger); }
+        .footer-meta {
+            margin-top: 24px; font-size: 11px; color: var(--muted); text-align: right;
+        }
+        .controls {
+            display: flex; gap: 8px; align-items: center; margin-bottom: 12px; font-size: 13px;
+        }
+        .controls label { color: var(--muted); }
+        .controls select {
+            background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
+            padding: 6px 10px; border-radius: 6px; font-family: inherit; font-size: 13px;
+        }
+        .controls .reload {
+            background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-soft);
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;
+        }
+        .controls .reload:hover { border-color: var(--accent); }
+        .bar-track { background: var(--panel-2); border-radius: 4px; height: 8px; overflow: hidden; }
+        .bar-fill  { background: var(--accent); height: 100%; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <!-- Login view -->
+        <div id="login-view" class="login" hidden>
+            <h2>Superba Admin</h2>
+            <p>Sign in with your admin email. A one-time login link will be sent.</p>
+            <form id="login-form">
+                <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+                <button id="login-btn" type="submit">Send login link</button>
+            </form>
+            <div id="login-msg" class="msg"></div>
+        </div>
+
+        <!-- Dashboard view -->
+        <div id="dash-view" hidden>
+            <header class="top">
+                <h1>Superba Admin</h1>
+                <div class="who">
+                    <span id="who-email"></span>
+                    <button id="signout-btn">Sign out</button>
+                </div>
+            </header>
+
+            <section>
+                <h2>Totals</h2>
+                <div id="totals-cards" class="cards"></div>
+            </section>
+
+            <section>
+                <h2>Active users</h2>
+                <div id="active-cards" class="cards"></div>
+            </section>
+
+            <section>
+                <h2>Run activity</h2>
+                <div id="runs-cards" class="cards"></div>
+            </section>
+
+            <section>
+                <h2>Users by region</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Region</th>
+                                <th class="num">Users</th>
+                                <th style="width:55%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="regions-tbody">
+                            <tr><td colspan="3" class="empty">Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="footer-meta">Approximate — latest run location, falling back to phone country code.</div>
+            </section>
+
+            <section>
+                <h2 style="display:flex;align-items:center;justify-content:space-between;">
+                    <span>Recent run activity</span>
+                </h2>
+                <div class="controls">
+                    <label for="limit">Show last</label>
+                    <select id="limit">
+                        <option value="50">50</option>
+                        <option value="200" selected>200</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                    </select>
+                    <button class="reload" id="reload-btn">↻ Refresh</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>When</th>
+                                <th>User</th>
+                                <th class="num">Distance</th>
+                                <th class="num">Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody id="runs-tbody">
+                            <tr><td colspan="4" class="empty">Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="footer-meta" id="generated-at"></div>
+            </section>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+
+        const SUPABASE_URL = "https://tqugnlmtkvmdzwqskgva.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxdWdubG10a3ZtZHp3cXNrZ3ZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxNDYwNzgsImV4cCI6MjA3NzcyMjA3OH0.ObAL7EHHu36vbsjmTV7UexwzuIor6DsQdaRRFNc-EbM";
+        const FN_URL = `${SUPABASE_URL}/functions/v1/admin_metrics`;
+        const REDIRECT_TO = `${window.location.origin}/admin/`;
+
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+        });
+
+        const $ = (id) => document.getElementById(id);
+
+        // ---------- View switching ----------
+        function showLogin()  { $("login-view").hidden = false; $("dash-view").hidden = true; }
+        function showDash()   { $("login-view").hidden = true;  $("dash-view").hidden = false; }
+
+        // ---------- Login flow ----------
+        $("login-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = $("email").value.trim();
+            const btn   = $("login-btn");
+            const msg   = $("login-msg");
+            msg.className = "msg";
+            msg.textContent = "";
+            btn.disabled = true;
+            btn.textContent = "Sending…";
+            try {
+                const { error } = await supabase.auth.signInWithOtp({
+                    email,
+                    options: { emailRedirectTo: REDIRECT_TO },
+                });
+                if (error) throw error;
+                msg.className = "msg ok";
+                msg.textContent = "Check your email — click the link to sign in.";
+            } catch (err) {
+                msg.className = "msg err";
+                msg.textContent = err.message || "Failed to send link.";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Send login link";
+            }
+        });
+
+        $("signout-btn").addEventListener("click", async () => {
+            await supabase.auth.signOut();
+            window.location.reload();
+        });
+
+        // ---------- Data load + render ----------
+        async function loadMetrics() {
+            const tbody = $("runs-tbody");
+            tbody.innerHTML = `<tr><td colspan="4" class="empty">Loading…</td></tr>`;
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { showLogin(); return; }
+
+            const limit = $("limit").value;
+            let res;
+            try {
+                res = await fetch(`${FN_URL}?limit=${encodeURIComponent(limit)}`, {
+                    headers: { Authorization: `Bearer ${session.access_token}` },
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="4" class="err">Network error: ${err.message}</td></tr>`;
+                return;
+            }
+
+            if (res.status === 401) { showLogin(); return; }
+            if (res.status === 403) {
+                tbody.innerHTML = `<tr><td colspan="4" class="err">This account is not in the admin allowlist.</td></tr>`;
+                return;
+            }
+            if (!res.ok) {
+                const txt = await res.text().catch(() => "");
+                tbody.innerHTML = `<tr><td colspan="4" class="err">HTTP ${res.status} — ${txt}</td></tr>`;
+                return;
+            }
+
+            const payload = await res.json();
+            render(payload);
+        }
+
+        function render(p) {
+            renderCards("totals-cards", [
+                { label: "Total users",     value: p.totals.total_users },
+                { label: "Total runs",      value: p.totals.total_runs },
+            ]);
+            renderCards("active-cards", [
+                { label: "DAU",  value: p.active.dau, sub: "active last 24h" },
+                { label: "WAU",  value: p.active.wau, sub: "active last 7d" },
+                { label: "MAU",  value: p.active.mau, sub: "active last 30d" },
+            ]);
+            renderCards("runs-cards", [
+                { label: "Runs (24h)", value: p.runs.runs_24h, sub: `${fmtInt(p.runs.runners_dau)} runners` },
+                { label: "Runs (7d)",  value: p.runs.runs_7d,  sub: `${fmtInt(p.runs.runners_wau)} runners` },
+                { label: "Runs (30d)", value: p.runs.runs_30d, sub: `${fmtInt(p.runs.runners_mau)} runners` },
+            ]);
+            renderRegions(p.regions || []);
+
+            const tbody = $("runs-tbody");
+            const rows = p.recent_runs || [];
+            if (rows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="empty">No runs yet.</td></tr>`;
+            } else {
+                tbody.innerHTML = rows.map(rowHtml).join("");
+            }
+            $("generated-at").textContent =
+                "Snapshot at " + new Date(p.generated_at).toLocaleString();
+        }
+
+        function renderRegions(regions) {
+            const tbody = $("regions-tbody");
+            if (regions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="empty">No data.</td></tr>`;
+                return;
+            }
+            const max = Math.max(...regions.map(r => Number(r.users) || 0), 1);
+            tbody.innerHTML = regions.map(r => `
+                <tr>
+                    <td>${escapeHtml(r.region)}</td>
+                    <td class="num">${fmtInt(r.users)}</td>
+                    <td>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width:${Math.max(2, Math.round(100 * (Number(r.users) || 0) / max))}%"></div>
+                        </div>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        function renderCards(targetId, cards) {
+            const el = $(targetId);
+            el.innerHTML = cards.map(c => `
+                <div class="card">
+                    <div class="label">${escapeHtml(c.label)}</div>
+                    <div class="value">${fmtInt(c.value)}</div>
+                    ${c.sub ? `<div class="sub">${escapeHtml(c.sub)}</div>` : ""}
+                </div>
+            `).join("");
+        }
+
+        function rowHtml(r) {
+            const name = [r.first_name, r.last_name].filter(Boolean).join(" ") || "—";
+            const when = r.started_at ? new Date(r.started_at).toLocaleString() : "—";
+            const dist = r.distance_meters != null ? (r.distance_meters / 1000).toFixed(2) + " km" : "—";
+            const dur  = r.duration_seconds != null ? fmtDuration(r.duration_seconds) : "—";
+            return `
+                <tr>
+                    <td>${escapeHtml(when)}</td>
+                    <td class="user">
+                        <span class="name">${escapeHtml(name)}</span>
+                        <span class="email">${escapeHtml(r.email || "—")}</span>
+                    </td>
+                    <td class="num">${escapeHtml(dist)}</td>
+                    <td class="num">${escapeHtml(dur)}</td>
+                </tr>
+            `;
+        }
+
+        function fmtInt(n) {
+            return Number(n ?? 0).toLocaleString();
+        }
+        function fmtDuration(s) {
+            s = Math.max(0, Number(s) | 0);
+            const h = (s / 3600) | 0;
+            const m = ((s % 3600) / 60) | 0;
+            const ss = s % 60;
+            if (h > 0) return `${h}h ${m}m ${ss}s`;
+            if (m > 0) return `${m}m ${ss}s`;
+            return `${ss}s`;
+        }
+        function escapeHtml(s) {
+            return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            }[c]));
+        }
+
+        $("limit").addEventListener("change", loadMetrics);
+        $("reload-btn").addEventListener("click", loadMetrics);
+
+        // ---------- Boot ----------
+        (async () => {
+            // detectSessionInUrl handles the magic-link redirect automatically.
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                showDash();
+                $("who-email").textContent = session.user.email || "";
+                loadMetrics();
+            } else {
+                showLogin();
+            }
+
+            supabase.auth.onAuthStateChange((event, sess) => {
+                if (event === "SIGNED_IN" && sess) {
+                    showDash();
+                    $("who-email").textContent = sess.user.email || "";
+                    loadMetrics();
+                } else if (event === "SIGNED_OUT") {
+                    showLogin();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
