@@ -8,14 +8,14 @@
     <link rel="icon" href="/superba-logo.png">
     <style>
         :root {
-            --bg: #0b0b0f;
-            --panel: #15161c;
-            --border: #2a2d39;
-            --text: #ececf1;
-            --muted: #8a8fa3;
-            --accent: #6ee7ff;
-            --warn-bg: rgba(255, 196, 0, 0.08);
-            --warn-border: rgba(255, 196, 0, 0.35);
+            --bg: #ffffff;
+            --panel: #f6f7f9;
+            --border: #e4e6eb;
+            --text: #1a1c22;
+            --muted: #6b7180;
+            --accent: #4d7c0f;
+            --warn-bg: #fff8e6;
+            --warn-border: #f0c36d;
         }
         * { box-sizing: border-box; }
         html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
@@ -26,7 +26,12 @@
         }
         .wrap { max-width: 760px; margin: 0 auto; padding: 40px 24px 96px; }
         header { margin-bottom: 40px; }
-        header img { width: 56px; height: 56px; border-radius: 14px; }
+        .app-icon {
+            width: 64px; height: 64px; background: #000;
+            border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .app-icon img { width: 44px; height: 44px; }
         h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.3px; margin: 18px 0 4px; }
         .updated { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
         h2 {
@@ -53,7 +58,7 @@
 <body>
 <div class="wrap">
     <header>
-        <img src="/superba-logo.png" alt="Superba">
+        <div class="app-icon"><img src="/superba-logo.png" alt="Superba"></div>
         <h1>Superba – Terms &amp; Privacy Policy</h1>
         <p class="updated">Last Updated: July 26, 2026</p>
     </header>
